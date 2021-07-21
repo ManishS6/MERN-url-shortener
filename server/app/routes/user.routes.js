@@ -5,5 +5,5 @@ module.exports = function(app) {
     app.post('/new',[authJwt.verifyToken],UrlController.newUrl)
     // implementing
     app.get('/all',[authJwt.verifyToken],UrlController.allUrls)
-    app.get('/:id',UrlController.getUrl)
+    app.get('/:shorturl',UrlController.getUrl)
 }

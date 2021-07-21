@@ -58,5 +58,17 @@ exports.newUrl = (req,res) => {
 }
 
 exports.getUrl = (req,res) => {
-    
+        Url.findOne({
+          short_url: req.params.shorturl
+        }).exec((err,url)=>{
+            // console.log(url)
+            if(err){
+                return res.status(500).send({Message: err})
+            }    
+            if(url){
+                return res.redirect(url.complete_url)
+            } else {
+                return res.status(404).json('not found')
+            }
+        })
 }
