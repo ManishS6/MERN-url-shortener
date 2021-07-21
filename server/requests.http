@@ -1,0 +1,31 @@
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "username":"swami",
+    "password":"swami",
+    "email":"aa2013manish@gmail.com"
+}
+
+###
+
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "input1":"aa2013manish@gmail.com",
+    "password":"swami"
+}
+
+###
+POST http://localhost:3000/new
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjg0YTE4ZjY0ZjAwNTlmMDIzM2M3YiIsImlhdCI6MTYyNjg4NDYzMiwiZXhwIjoxNjI2OTcxMDMyfQ.0jjgQo1k879shsXHf_AwRZcC8TlaMq8rh7nLcNk4feg
+Content-Type: application/json
+
+{
+    "url": "https://www.facebook.com/"
+}
+
+###
+GET http://localhost:3000/all
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjg0YTE4ZjY0ZjAwNTlmMDIzM2M3YiIsImlhdCI6MTYyNjg4NDYzMiwiZXhwIjoxNjI2OTcxMDMyfQ.0jjgQo1k879shsXHf_AwRZcC8TlaMq8rh7nLcNk4feg
