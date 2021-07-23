@@ -17,7 +17,7 @@ exports.signup = (req,res) => {
             res.status(500).send({message:err})
             return
         }
-        var accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
+        var accessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: 86400 // 24 hours
         })
         // res.cookie("auth-token", accessToken, {
@@ -28,8 +28,6 @@ exports.signup = (req,res) => {
         // });
         return res.status(200).send({
             username: user.username,
-            email: user.email,
-            password: user.password,
             accessToken: accessToken
         })
     })
@@ -38,7 +36,7 @@ exports.signup = (req,res) => {
 exports.signin = (req,res) => {
     if(ValidateEmail(req.body.input1)){
         // The given string is email
-        console.log("Email was provided #DEL_LATER")
+        console.log("#DEL_LATER Email was provided")
         User.findOne({
             email: req.body.input1
         }).exec((err,user)=>{
@@ -63,16 +61,17 @@ exports.signin = (req,res) => {
                   message: "Invalid Password!"
                 });
             }
-            var accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
+            var accessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
                 expiresIn: 86400 // 24 hours
             })
             res.status(200).send({
+                username: user.username,
                 accessToken: accessToken
             })
         })
     } else {
         // The given string is password
-        console.log("Username was provided #DEL_LATER")
+        console.log("#DEL_LATER Username was provided")
         User.findOne({
             username: req.body.input1
         }).exec((err,user)=>{
@@ -101,11 +100,13 @@ exports.signin = (req,res) => {
                 expiresIn: 86400 // 24 hours
             })
             res.status(200).send({
+                username: user.username,
                 accessToken: accessToken
             })
         })
     }
 }
+
 function ValidateEmail(inputText)
 {
     var format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -122,7 +123,7 @@ exports.tokenInValid = async (req, res) => {
       const token = req.header("x-auth-token");
       if (!token) return res.json(false);
   
-      const verified = jwt.verify(token, process.env.JWT_SECRET);
+      const verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
       if (!verified) return res.json(false);
   
       const user = await User.findById(verified.id);
@@ -132,4 +133,17 @@ exports.tokenInValid = async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
+}
+
+exports.getUsername = (req,res) => {
+    console.log('The user received by getUsername function is',req.user)
+    User
+    .findById(req.user)
+    .exec((err,user)=>{
+        if(err) return res.status(404).send('no user found')
+        return res.json({
+            username: user.username,
+            id: user._id
+        })
+    })
 }

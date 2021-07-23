@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React,{useRef,useState,useContext} from 'react'
 import {Card,Form,Button,Alert} from 'react-bootstrap'
-import {Link, useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
+import UserContext from './userContext';
 
 export default function Signup() {
     const usernameRef = useRef();
@@ -10,6 +11,7 @@ export default function Signup() {
     const passwordConfirmRef = useRef();
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const {setUserData} = useContext(UserContext)
     const history = useHistory()
 
     async function handleSubmit(e){
@@ -20,8 +22,6 @@ export default function Signup() {
         try{
             setError('')
             setLoading(true)
-            // await login(emailRef.current.value,passwordRef.current.value)
-            // history.push("/")
             const signupUser = {
                 username: usernameRef.current.value,
                 password: passwordRef.current.value,
@@ -29,9 +29,10 @@ export default function Signup() {
             }
             const signupRes = await axios.post('http://localhost:5000/auth/signup',signupUser)
             console.log(signupRes)
-            // setUserData({
-            //     token: loginRes.data.accessToken
-            // })
+            setUserData({
+                user: signupRes.data.username,
+                token: signupRes.data.accessToken
+            })
             localStorage.setItem("auth-token",signupRes.data.accessToken)
             history.push('/')
         } catch{

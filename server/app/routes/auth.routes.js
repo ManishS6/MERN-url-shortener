@@ -1,5 +1,5 @@
 const controller = require("../controllers/auth.controller");
-const { verifySignUp } = require("../middlewares");
+const { verifySignUp, auth } = require("../middlewares");
 
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -14,5 +14,8 @@ module.exports = function(app) {
   
     app.post("/auth/signin", controller.signin)
 
-    app.post("auth/tokenIsValid", controller.tokenInValid)
+    app.post("/auth/tokenIsValid", controller.tokenInValid)
+
+    app.get('/auth',auth,controller.getUsername)
+
 }

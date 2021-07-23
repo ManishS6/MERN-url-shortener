@@ -1,37 +1,36 @@
 import axios from 'axios';
 import React,{useRef,useState,useContext} from 'react'
 import {Card,Form,Button,Alert} from 'react-bootstrap'
-import {Link, useHistory} from 'react-router-dom'
-// import UserContext from './userContext';
+import {useHistory} from 'react-router-dom'
+import UserContext from './userContext';
 
 export default function Login() {
     const idRef = useRef();
     const passwordRef = useRef();
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    // const {setUserData} = useContext(UserContext)
+    const {setUserData} = useContext(UserContext)
     const history = useHistory()
 
     async function handleSubmit(e){
         e.preventDefault()
-        
+
         try{
             setError('')
             setLoading(true)
-            // await login(emailRef.current.value,passwordRef.current.value)
-            // history.push("/")
             const loginUser = {input1: idRef.current.value, password: passwordRef.current.value}
             const loginRes = await axios.post('http://localhost:5000/auth/signin',loginUser)
             console.log(loginRes)
-            // setUserData({
-            //     token: loginRes.data.accessToken
-            // })
+            setUserData({
+                user: loginRes.data.username,
+                token: loginRes.data.accessToken
+            })
             localStorage.setItem("auth-token",loginRes.data.accessToken)
-            history.push('/')
+            setLoading(false)
+            history.push('/') // this unmounts this.Component
         } catch{
             setError('Failed to login')
         }
-        setLoading(false)
 
     }
 
