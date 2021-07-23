@@ -4,7 +4,7 @@ const User = db.user;
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
   User.findOne({
-    username: req.body.username
+    username: req.cookies["auth-token"] || req.body.username,
   }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -18,7 +18,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
 
     // Email
     User.findOne({
-      email: req.body.email
+      email: req.body.email,
     }).exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
@@ -35,7 +35,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
 };
 
 const VerifySignup = {
-    checkDuplicateUsernameOrEmail
-}
+  checkDuplicateUsernameOrEmail,
+};
 
-module.exports = VerifySignup
+module.exports = VerifySignup;

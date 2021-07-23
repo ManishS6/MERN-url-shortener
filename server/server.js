@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const cookieParser = require("cookie-parser");
 const app = express()
 const cors = require('cors')
 const port = process.env.PORT || 3000
@@ -11,6 +12,7 @@ const option = {
   useNewUrlParser: true
 }
 app.use(express.json({ limit: '50mb' }));
+app.use(cookieParser());
 
 app.use(cors())
 const db = require("./app/models");

@@ -20,6 +20,12 @@ exports.signup = (req,res) => {
         var accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: 86400 // 24 hours
         })
+        // res.cookie("auth-token", accessToken, {
+        //     httpOnly: true,
+        //     sameSite: "none",
+        //     secure: true,
+        //     maxAge: 15 * 24 * 3600000
+        // });
         return res.status(200).send({
             username: user.username,
             email: user.email,
